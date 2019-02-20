@@ -110,7 +110,7 @@ MyPromise.prototype.then = function (onResolved, onRejected) {
     function resolutionProcedure(promise, x, resolve, reject) {
         let then, thenCalledOrThrow = false
         console.log(promise,x)
-        //如果promise 和 x 指向相同的值, 使用 TypeError做为原因将promise拒绝。
+        //如果最终返回的promise 和 调用里面返回的x 相等 因为返回的x，是可以取到外层promise的索引的，会 指向相同的值, 使用 TypeError做为原因将promise拒绝，避免无限循环,看下面例子解释。
         if (promise === x) {
             return reject(new TypeError('Chaining cycle detected for promise!'))
         }
