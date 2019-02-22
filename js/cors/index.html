@@ -12,6 +12,54 @@
     <script src="./ajax.js"></script>
     <script>
         //这个是ajax的get跟post请求demo
+        /*
+            method:head,get,post
+            content-type:text/plain,multipart/form-data，application/x-www-form-urlencoded
+            不能超过所列请求头信息：Accept,Accept-Language,Content-Language,Last-Event-ID
+
+            如果完全满足上面的条件，就是简单请求，只需要设置返回头Access-Control-Allow-Origin为“*”或者是对应请求头origin：ctx.request.headers.origin
+            
+            只要不符合上面任何一项条件，就是复杂的跨域请求,
+            复杂的跨域请求解释:除了简单的跨域请求的方法。比如PUT、DELETE，
+            除了简单的跨域请求的Content-type类型。比如application/json，
+            自定义的header头，
+            不同域名下的cookie传输
+
+            复杂请求会先进行options预请求，
+            对后台设置对应的允许返回头 Access-Control-Allow-Methods 
+            或 Access-Control-Allow-Headers 或者 Access-Control-Allow-Credentials进行验证，通过了才发起复杂请求的实际请求
+            
+            请注意：不带有withCredentials=true的复杂请求，Access-Control-Allow-Methods，Access-Control-Allow-Origin
+            或 Access-Control-Allow-Headers可以设置为“*”，但是如果前端请求withCredentials=true，
+            那么上面三个返回头都要设置对应的具体值，否则是不生效的，并且只有同时设置返回头Access-Control-Allow-Credentials：true，
+            那么cookie跨域传输才会成功，cookie跨域也讲究同源，无论是前端携带cookie传送，还是后端设置返回头set-cookie，都要客户端跟服务端配合，
+            浏览器请求设置withCredentials=true,服务端设置返回头 Access-Control-Allow-Credentials：true，
+
+            为了避免每次都进行复杂请求都有options请求，从而造成不必要的性能问题，返回头设置 Access-Control-Max-Age:秒数，
+            表示 preflight request  （预检请求）的返回结果，如Access-Control-Allow-Methods 和Access-Control-Allow-Headers，
+            能被浏览器缓存多久，验证过第一次之后，在这个时间内不再发起options预请求。
+
+            前端如何拿到返回头信息呢?可以通过xhr.getResponseHeader方法进行获取。
+            但是此方法只能拿到6个基本字段：Cache-Control、Content-Language、Content-Type、Expires、Last-Modified、Pragma。
+            其他返回头属性如ctx.response.setHader(name,'jgchen')，需要后端ctx.response.setHeader('Access-Control-Expose-Headers', 'name') 才能拿到name这样的自定义属性
+            否则就会Refused to get unsafe header "name" // 拒绝获取不安全的头信息“name”
+
+        */
+        ajax({
+            method: 'PUT',
+            url: 'http://127.0.0.1:3000/ajax',
+            data: {
+                name: 'jgchen',
+                stuNo: 2016130201,
+                method: 'PUT'
+            },
+            success(res) {
+                console.log('PUT success:', res);
+            },
+            error(err) {
+                console.log(err);
+            }
+        })
         ajax({
             method: 'post',
             url: 'http://127.0.0.1:3000/ajax',
@@ -21,7 +69,7 @@
                 method: 'post'
             },
             success(res) {
-                console.log('POST success:',res);
+                console.log('POST success:', res);
             },
             error(err) {
                 console.log(err);
@@ -36,7 +84,7 @@
                 method: 'get'
             },
             success(res) {
-                console.log('GET success:',res);
+                console.log('GET success:', res);
             },
             error(err) {
                 console.log(err);
@@ -52,7 +100,7 @@
                 method: 'jsonp'
             },
             success(res) {
-                console.log('jsonp success:',res);
+                console.log('jsonp success:', res);
             },
             error(err) {
                 console.log(err);

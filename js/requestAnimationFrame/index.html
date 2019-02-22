@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Script-based animation using requestAnimationFrame</title>
+    <style type="text/css">
+        div {
+            position: absolute;
+            left: 10px;
+            top: 100px;
+            padding: 50px;
+            background: crimson;
+            color: white;
+        }
+    </style>
+    <script type="text/javascript">
+        var requestId = 0;
+        var startime = 0;
+        var lpos = 0;
+        var elm;
+
+        function init() {
+            elm = document.getElementById("animated");
+        }
+
+        function render() {
+            elm.style.left = ((lpos += 3) % 600) + "px";
+            requestId = window.requestAFrame(render);
+        }
+
+        function start() {
+            // performance.now() 与 Date.now() 不同的是，返回了以微秒（百万分之一秒）为单位的时间，更加精准。
+            if (window.performance.now) {
+                startime = window.performance.now();
+                console.log(startime)
+            } else {
+                startime = Date.now();
+            }
+            requestId = window.requestAFrame(render);
+        }
+
+        function stop() {
+            if (requestId)
+                window.cancelAFrame(requestId);
+        }
+
+
+        // requestAFrame函数的多个浏览器的兼容
+        window.requestAFrame = (function () {
+            return window.requestAnimationFrame ||
+                window.webkitRequestAnimationFrame ||
+                window.mozRequestAnimationFrame ||
+                window.oRequestAnimationFrame ||
+                // if all else fails, use setTimeout
+                function (callback) {
+                    return window.setTimeout(callback, 1000 / 60); // shoot for 60 fps 一般浏览器的刷新频率在60hz 每次1000/60=16.7ms
+                };
+        })();
+
+        //  cancelAnimationFrame函数的多个浏览器的兼容
+        window.cancelAFrame = (function () {
+            return window.cancelAnimationFrame ||
+                window.webkitCancelAnimationFrame ||
+                window.mozCancelAnimationFrame ||
+                window.oCancelAnimationFrame ||
+                function (id) {
+                    window.clearTimeout(id);
+                };
+        })();
+    </script>
+    <!-- 回调函数执行频率通常与浏览器屏幕刷新频率相匹配 -->
+</head>
+
+<body onload="init();">
+
+    <div id="animated">Hello there.</div>
+    <button onclick="start()">Start</button>
+    <button onclick="stop()">Stop</button>
+</body>
+
+</html>

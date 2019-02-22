@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- 
+        meta标签是HTML语言HEAD区的一个辅助性标签。
+        meta常用于定义页面的说明，关键字，最后修改日期，
+        和其它的元数据。这些元数据将服务于浏览器（如何布局或重载页面），
+        搜索引擎和其它网络服务。 
+    -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- content属性的内容是htp-equiv或name的值 对应属性的值，具体取决于你用哪一个。如Pragma：no-cache-->
+    <!-- Pragma 禁止浏览器从本地计算机的缓存中访问页面内容。如： -->
+    <meta http-equiv="Pragma" content="no-cache">
+    <!-- expires可以用于设定网页的到期时间。一旦网页过期，必须到服务器上重新传输。 -->
+    <meta HTTP-EQUIV="Expires" CONTENT="0">
+    <!-- Cache-Control 设置浏览器走协商缓存 -->
+    <meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
+
+    <!-- 上面的三个meta共同配合设置html页面不缓存，
+    还有一种就是nginx 返回的时候，设置返回头，
+    或者是node服务器起的服务,
+    ctx.set('Cache-Control','no-cache'),
+    ctx.set('Paramga','no-cache'),
+    ctx.set('Cache-Control','no-cache')  
+    -->
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self'; object-src 'none'; style-src cdn.example.org third-party.org; child-src https:">
+    <!-- 上面代码中，CSP 做了如下配置:
+
+        脚本：只信任当前域名下的src脚本，不支持内联脚本，避免xss攻击
+
+        <object>标签：不信任任何URL，即不加载任何资源
+
+        样式表：只信任cdn.example.org和third-party.org
+
+        框架（frame）：必须使用HTTPS协议加载
+
+        其他资源：没有限制
+
+       也可以设置 HTTP Header 中的 Content-Security-Policy 来达到同样的效果
+     -->
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+
+</html>

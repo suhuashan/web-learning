@@ -4,8 +4,16 @@ const cors = require('koa2-cors');
 const koaBody = require('koa-body');
 const app = new Koa;
 let home = Router();
+/*
+
+*/
 app.use(async(ctx,next)=>{
-    ctx.set('Access-Control-Allow-Origin', 'http://127.0.0.1:58014');
+    ctx.set('Access-Control-Allow-Origin', ctx.request.headers.origin);
+    ctx.set('Access-Control-Allow-Methods', 'PUT');
+    ctx.set('Access-Control-Expose-Headers','keyword')
+    ctx.set('Access-Control-Allow-Credentials','true')
+    ctx.set('keyword','jgchen')
+    ctx.set('Access-Control-Allow-Headers', 'request-header,content-type');
     await next();
 })
 // app.use(cors());
@@ -19,21 +27,30 @@ home.get('/', async (ctx) => {
 })
 
 home.get('/ajax', async (ctx) => {
-    console.log('get')
+    console.log(ctx.cookies.get('name'))
+    ctx.cookies.set('password','qqqqqq')
+    console.log('get called')
     return ctx.body = {
         code: 200,
         data: ctx.request.query
     }
 })
 home.post('/ajax', async (ctx) => {
-    console.log('post')
-    ctx.set('Access-Control-Allow-Origin', 'http://127.0.0.1:58014');
+    console.log('post called')
+    return ctx.body = {
+        code: 200,
+        data: ctx.request.body
+    }
+})
+home.put('/ajax', async (ctx) => {
+    console.log('put called')
     return ctx.body = {
         code: 200,
         data: ctx.request.body
     }
 })
 home.get('/jsonp', async (ctx) => {
+    console.log('jsonp called')
     let callbackName = ctx.request.query.callback;
     let data = {
         code: 200,

@@ -8,28 +8,42 @@ function formateData(data) {
     return arr.join('&');
 }
 
-//ajax 实现的大概思路是 取一个params的对象参数，对里面的data进行序列化处理，
-//formatData函数序列化处理便于GET请求携带变量参数 ，或者POST等其他请求的请求头设置为Content-type:application/x-www-form-urlencoded，请求体内容进行序列化
-//当POST方法时候 send(请求体内容)
-//当GET方法时候  xhr.open(方法，地址+参数，异步boolean)
-//设置onreadystatechange函数回调或者onload函数毁掉
+/*
+  ajax 实现的大概思路是 取一个params的对象参数，对里面的data进行序列化处理，
+  formatData函数序列化处理便于GET请求携带变量参数 ，或者POST等其他请求的请求头设置为Content-type:application/x-www-form-urlencoded，请求体内容进行序列化
+  当POST方法时候 send(请求体内容)
+  当GET方法时候  xhr.open(方法，地址+参数，异步boolean)
+  设置onreadystatechange函数回调或者onload函数毁掉
+  */
 function ajax(params) {
     params = params || {};
     params.data = params.data || {};
-    params.data = formateData(params.data)
     var xhr = XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
     params.method = (params.method || 'GET').toUpperCase();
+    xhr.withCredentials = true;
     if (params.method === 'GET') {
-        xhr.open(params.method, params.url + '?' + params.data, true)
+        xhr.open(params.method, params.url + '?' + formateData(params.data), true)
         xhr.send();
     } else {
         xhr.open(params.method, params.url, true);
-        // 设置 Content-Type 为 application/x-www-form-urlencoded
-        // 以表单的形式传递数据 
-        // 使用 xhr.send('username=admin&password=root')这样的格式
+        // xhr.setRequestHeader("name", "jgchen")
+        /* 设置 Content-Type 为 application/x-www-form-urlencoded
+         以表单urlencoded的形式传递数据 
+         使用 xhr.send('username=admin&password=root')这样的格式
+        */
 
-        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-        xhr.send(params.data);
+        // xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+        // xhr.send(formateData(params.data));
+        /*
+         设置Content-Type:为application/json，以json格式传递数据
+         这种会触发复杂跨域，需要后台配置ctx.set('Access-Control-Allow-Header','content-type')
+         对params.data不能调用formdata进行格式化，要进行JSON.stringfiy(params.data)
+         使用xhr.send({"username":"admin","password":"root"})
+         */
+        xhr.setRequestHeader("Content-type", "application/json")
+        xhr.setRequestHeader("request-header", "test-my-header")
+
+        xhr.send(JSON.stringify(params.data));
     }
     // readyState有五种可能的值：
     // 0 (未初始化)： (XMLHttpRequest)对象已经创建，但还没有调用open()方法。
@@ -45,6 +59,7 @@ function ajax(params) {
             var res;
             if (params.success && params.success instanceof Function) {
                 res = JSON.parse(xhr.responseText);
+                console.log(xhr.getResponseHeader('keyword'))
                 params.success.call(xhr, res);
             }
         } else {

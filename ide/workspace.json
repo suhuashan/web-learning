@@ -1,0 +1,37 @@
+{
+    "team.showWelcomeMessage": false,
+    "emmet.triggerExpansionOnTab": true,
+    //移除html里面的js警告
+    "javascript.implicitProjectConfig.experimentalDecorators": true,
+    "files.associations": {
+        "*.wpy": "vue",
+        "*.vue": "vue"
+    }, // 每次保存的时候将代码按eslint格式进行修复
+    "eslint.validate": [ //开启对.vue文件中错误的检查
+        "javascript",
+        "javascriptreact",
+        {
+            "language": "html",
+            "autoFix": true
+        },
+        {
+            "language": "vue",
+            "autoFix": true
+        }
+    ],
+    //保存自己修复
+    "eslint.autoFixOnSave": true,
+    //自动保存格式化
+    "editor.formatOnSave": false,
+    // 点击保存时，根据 eslint 规则自定修复，同时集成 prettier 到 eslint 中
+    // Enable/disable default JavaScript formatter (For Prettier)
+    "javascript.format.enable": false,
+    "prettier.eslintIntegration": true,
+    "git.autofetch": true,
+    //终端使用的命令路径
+    "terminal.integrated.shell.osx": "/bin/zsh",
+    //显示所有编辑窗口
+    "workbench.editor.showTabs": true,
+    //将文件目录展示在左边
+    "workbench.sideBar.location": "left",
+}
