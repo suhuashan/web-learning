@@ -29,6 +29,8 @@
         var clientWidth = window.innerWidth;
         //一般不要用body.clientHeight body的content高度一般是由里面的元素高度撑开的，content宽度默认铺满窗口，如果body元素里面没有元素，则content高度为0
         // 而且不要用body.scrollTop跟scrollLeft做滚动距离判断  默认为0 ，就算滚动，也是documentElement的滚动，body跟子元素在一块了，scrolltop一直为0
+        //document.documentElement.scrollTop===window.pageYOffset
+        //document.documentElement.scrollLeft===window.pageXOffset
         var scrollTop = document.documentElement.scrollTop;
         var scrollHeight = document.documentElement.scrollHeight;
         var scrollWidth = document.documentElement.scrollWidth;

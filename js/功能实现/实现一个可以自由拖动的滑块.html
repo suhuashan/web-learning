@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>实现一个可以自由拖动的滑块</title>
+    <style>
+        #drag {
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            position: absolute;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="drag">
+
+    </div>
+    <script>
+        var doffsetX = 0;
+        var doffsetY = 0;
+        var drag = document.querySelector('#drag');
+        var mouseMove = function (e) {
+            requestAnimationFrame(function () {
+                drag.style.left = e.clientX - doffsetX + 'px';
+                drag.style.top = e.clientY - doffsetY + 'px';
+            })
+        }
+        var mouseUp = function () {
+            document.removeEventListener('mousemove', mouseMove)
+            document.removeEventListener('mouseup', mouseUp)
+        }
+        drag.addEventListener('mousedown', function (e) {
+            //这一步可以看到 其实就是mousedown的时候取到点击的点到drag块的左上角的offsetX offsetY值，然后保存为doffsetX，doffsetY
+            //每次向下按监听document 的mousemouve事件，每次都可以取到滑动的点到可视化窗口的clientX跟clientY的值
+            //其实拖拽保持鼠标相对于这个drag的offsetX offsetY值不变
+            //所以我们要保证 拖动中的滑块drag.style.left=鼠标点的clientX-doffsetX(上一次的offsetX距离值),相对位置不变才能让鼠标看起来在拖动他
+            //同时也可以这么写 doffsetX=e.clientX-drag.offsetLeft=e.offsetX;
+            doffsetX = e.offsetX;
+            doffsetY = e.offsetY;
+            document.addEventListener('mousemove', mouseMove)
+            document.addEventListener('mouseup', mouseUp)
+        })
+    </script>
+</body>
+
+</html>
